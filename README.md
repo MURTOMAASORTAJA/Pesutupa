@@ -1,2 +1,2 @@
 # Pesutupa
-Pesutupa event server
+Pesutupa event service
