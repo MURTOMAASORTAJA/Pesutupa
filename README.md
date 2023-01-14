@@ -1,2 +1,2 @@
 # Pesutupa
-Web frontend for Pesutupa event
+Pesutupa event server
