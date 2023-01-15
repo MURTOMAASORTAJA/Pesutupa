@@ -8,7 +8,6 @@ var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 var builder = WebApplication.CreateBuilder(args);
 
 var allowedHosts = conf["AllowedHosts"]?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "*" };
-var urls = new[] { "http://localhost:80", "https://localhost:443" };
 builder.WebHost.ConfigureKestrel((ctx, serverOpts) =>
 {
     serverOpts.Listen(IPAddress.Loopback, 80);
@@ -21,9 +20,7 @@ builder.WebHost.ConfigureKestrel((ctx, serverOpts) =>
     });
 });
 Console.WriteLine("Allowed hosts:" + string.Join(", ", allowedHosts));
-Console.WriteLine("Urls: " + string.Join(", ", urls));
 
-builder.WebHost.UseUrls(urls);
 builder.Services.Configure<HostFilteringOptions>(options => options.AllowedHosts = allowedHosts);
 
 var app = builder.Build();
