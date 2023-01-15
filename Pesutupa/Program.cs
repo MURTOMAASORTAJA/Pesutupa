@@ -9,7 +9,7 @@ var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 var builder = WebApplication.CreateBuilder(args);
 
 var allowedHosts = conf["AllowedHosts"]?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "*" };
-var urls = conf["Urls"]?.Split(";", StringSplitOptions.RemoveEmptyEntries) ?? new[] { "http://localhost:80", "https://localhost:443" };
+var urls = new[] { "http://localhost:80", "https://localhost:443" };
 Console.WriteLine("Allowed hosts:" + string.Join(", ", allowedHosts));
 Console.WriteLine("Urls: " + string.Join(", ", urls));
 
