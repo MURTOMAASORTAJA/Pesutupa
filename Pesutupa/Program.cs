@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.HostFiltering;
-using Microsoft.Extensions.Configuration;
 using Pesutupa;
 using Pesutupa.Models;
 using System.Net;
@@ -10,6 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 var allowedHosts = conf["AllowedHosts"]?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "*" };
 var urls = new[] { "http://localhost:80", "https://localhost:443" };
+builder.WebHost.ConfigureKestrel((ctx, serverOpts) =>
+{
+    serverOpts.Listen(IPAddress.Loopback, 80);
+    serverOpts.Listen(IPAddress.Loopback, 443, listenOpts =>
+    {
+        if (!string.IsNullOrEmpty(conf["CertFilePath"]) && !string.IsNullOrEmpty(conf["CertFilePass"]))
+        {
+            listenOpts.UseHttps(conf["CertFilePath"], conf["CertFilePass"]);
+        }
+    });
+});
 Console.WriteLine("Allowed hosts:" + string.Join(", ", allowedHosts));
 Console.WriteLine("Urls: " + string.Join(", ", urls));
 
@@ -25,7 +35,10 @@ ConvertWhitelistToRegexes(conf);
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseHttpsRedirection();
+if (!string.IsNullOrEmpty(conf["CertFilePath"]))
+{
+    app.UseHttpsRedirection();
+}
 
 app.MapPost("/rsvp", ctx => IfWhitelistAllowsRequest(ctx, Rsvp.ProcessPostRsvp));
 
