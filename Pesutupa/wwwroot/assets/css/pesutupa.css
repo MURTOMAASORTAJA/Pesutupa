@@ -21,9 +21,6 @@
 }
 
 @media only screen and (min-width: 2000px) {
-    body {
-        background-color: lightcoral;
-    }
 
     .pesukone-logo {
         max-width: 35em;
@@ -35,9 +32,7 @@
 }
 
 @media only screen and (max-width: 1000px) {
-    body {
-        background-color: lightblue;
-    }
+
 
     .pesutupa-title {
         font-size: 12vw;
