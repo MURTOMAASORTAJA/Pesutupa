@@ -1,15 +1,21 @@
+using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.Extensions.Configuration;
 using Pesutupa;
 using Pesutupa.Models;
 using System.Net;
 using System.Text.RegularExpressions;
 
+var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 var builder = WebApplication.CreateBuilder(args);
+
+var allowedHosts = conf["AllowedHosts"]?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "*" };
+builder.Services.Configure<HostFilteringOptions>(options => options.AllowedHosts = allowedHosts);
 
 var app = builder.Build();
 
+app.UseHostFiltering();
 Regex[] whitelistRegexes;
-ConvertWhitelistToRegexes();
+ConvertWhitelistToRegexes(conf);
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -37,9 +43,8 @@ async Task<bool> WhitelistAllowsRequest(HttpContext ctx)
 
 static string WildCardToRegExStr(string value) => "^" + Regex.Escape(value).Replace("\\?", ".").Replace("\\*", ".*") + "$";
 
-void ConvertWhitelistToRegexes()
+void ConvertWhitelistToRegexes(IConfiguration conf)
 {
-    var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
     var children = conf.GetChildren();
 
     var json = conf.GetSection("Whitelist").Value;
