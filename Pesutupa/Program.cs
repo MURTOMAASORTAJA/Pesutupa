@@ -6,27 +6,8 @@ using System.Text.RegularExpressions;
 
 var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 var builder = WebApplication.CreateBuilder(args);
-
-var allowedHosts = conf["AllowedHosts"]?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "*" };
-builder.WebHost.ConfigureKestrel((ctx, serverOpts) =>
-{
-    serverOpts.ListenAnyIP(80);
-    serverOpts.Listen(IPAddress.Loopback, 80);
-    serverOpts.Listen(IPAddress.Loopback, 443, listenOpts =>
-    {
-        if (!string.IsNullOrEmpty(conf["CertFilePath"]) && !string.IsNullOrEmpty(conf["CertFilePass"]))
-        {
-            listenOpts.UseHttps(conf["CertFilePath"], conf["CertFilePass"]);
-        }
-    });
-});
-Console.WriteLine("Allowed hosts:" + string.Join(", ", allowedHosts));
-
-builder.Services.Configure<HostFilteringOptions>(options => options.AllowedHosts = allowedHosts);
-
 var app = builder.Build();
 
-app.UseHostFiltering();
 Regex[] whitelistRegexes;
 ConvertWhitelistToRegexes(conf);
 
