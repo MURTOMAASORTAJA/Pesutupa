@@ -1,0 +1,45 @@
+
+.pesutupa-title {
+    text-transform: none;
+    font-family: "Pesutupa";
+    font-size: 8vw;
+    max-width: 100%;
+    color: black;
+}
+
+.pesukone-logo {
+    max-width: 25vw;
+}
+
+.box.page-content h2 {
+    font-size: 3em;
+    /*margin: 0 0 0.5em 0;*/
+}
+
+.pesutupa-keypoints {
+    font-size: 5px;
+}
+
+@media only screen and (min-width: 2000px) {
+    body {
+        background-color: lightcoral;
+    }
+
+    .pesukone-logo {
+        max-width: 35em;
+    }
+
+    .pesutupa-title {
+        font-size: 6vw;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    body {
+        background-color: lightblue;
+    }
+
+    .pesutupa-title {
+        font-size: 12vw;
+    }
+}
