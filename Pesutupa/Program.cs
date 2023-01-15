@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var allowedHosts = conf["AllowedHosts"]?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new[] { "*" };
 builder.WebHost.ConfigureKestrel((ctx, serverOpts) =>
 {
+    serverOpts.ListenAnyIP(80);
     serverOpts.Listen(IPAddress.Loopback, 80);
     serverOpts.Listen(IPAddress.Loopback, 443, listenOpts =>
     {
