@@ -34,6 +34,7 @@ app.UseStaticFiles();
 
 if (!string.IsNullOrEmpty(conf["CertFilePath"]))
 {
+    Console.WriteLine("Using HTTPS redirection");
     app.UseHttpsRedirection();
 }
 
